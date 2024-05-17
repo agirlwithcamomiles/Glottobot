@@ -59,7 +59,6 @@ def get_info(user_language_reply: str, user_field: str):
                                        'domainelement.csv')
     chapters_values = pd.DataFrame(data=file_chapters_values)
     descriptions = dict()
-    n = 1
     if len(user_output) != 0:
         for chapter in user_output.keys():
             descriptions[chapter] = chapters_values.loc[chapters_values["id"] == chapter + "-"
@@ -77,8 +76,10 @@ def get_info(user_language_reply: str, user_field: str):
     # turning output into text format
     values = " ".join(final_output)
     keys = " ".join(final_output.keys())
-    output = f'Here is the information about {user_language_reply} {user_field}:\n\n'+"\n".join(f'{keys}: {values}'
-                                                                                                for keys, values in
-                                                                                                final_output.items())
+    if user_language in languages_info.values:
+        output = f'Here is the information about {user_language_reply} {user_field}:\n\n' + "\n".join(
+            f'{keys}: {values}' for keys, values in final_output.items())
+    else:
+        output = f'Unfortunately, {user_language_reply} cannot be found in WALS {user_field} database'
 
     return output
